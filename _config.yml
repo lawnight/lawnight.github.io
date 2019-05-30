@@ -1,2 +1,5 @@
-theme: minima
+plugins:
+  - jekyll-remote-theme
+  
+remote_theme: chromatical/jekyll-materialdocs
 title: 'blog'
