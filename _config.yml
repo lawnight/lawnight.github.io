@@ -1,6 +1,9 @@
+
 theme: minimal-mistakes-jekyll
 
 remote_theme: "mmistakes/minimal-mistakes"
+
+
 title: 'blog'
 
 encoding: "utf-8"
