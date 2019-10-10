@@ -1,5 +1,5 @@
 ---
-title: python字符串基础
+title: python web请求
 categories: python
 ---
 设计构造http请求，最常用的就是request库，并且也能实现cookie，代理，认证的需求。
