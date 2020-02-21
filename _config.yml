@@ -5,6 +5,7 @@ remote_theme: "mmistakes/minimal-mistakes"
 
 
 title: 'Simple is better'
+logo: "/assets/logo.png"
 
 encoding: "utf-8"
 permalink: /:categories/:title/
@@ -12,6 +13,7 @@ permalink: /:categories/:title/
 plugins:
   - jekyll-include-cache
 
+# 设定默认的布局
 defaults:
   - scope:
       path: ""
