@@ -1,6 +1,6 @@
 
 #theme: minimal-mistakes-jekyll
-
+# 第三方开源主题
 remote_theme: "mmistakes/minimal-mistakes"
 
 
