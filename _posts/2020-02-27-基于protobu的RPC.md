@@ -12,15 +12,16 @@ service SearchService {
 }
 ```
 
-在设置`java_generic_services`为`true`后，会根据service的定义生成响应代码。能生成无关的抽象类和接口，不和任意特定实现的RPC关联。
+设置`java_generic_services`为`true`，`protoc`会根据service的定义生成相应代码。生成的代码不和任意特定实现的RPC关联，只是相关的抽象类和接口。我们可以实现`RpcChannel`和`RpcController`接口来讲生成的代码和特定实现的RPC进行关联。
 
-基于`proto`服务定义的RPC，应该以插件的方式，来生成需要的代码。比如grpc就提供了代码生成插件，会根据service定义生成单独一个类，用于RPC操作。
+除了上面的方式，还能以提供[protc插件](https://developers.google.com/protocol-buffers/docs/reference/cpp#google.protobuf.compiler)的方式，来生成service定义的代码。比如`grpc`就提供了代码生成插件，会根据定义生成单独一个类，用于RPC操作。
 ```bash
 protoc --plugin=protoc-gen-grpc-java=protoc-gen-grpc-java.exe --grpc-java_out=..\java\  "A.proto" 
 ```
+
 # 2. RPC的具体实现
 
-protobuf官方文档列举了多个基于protobuf实现的[RPC](https://github.com/protocolbuffers/protobuf/blob/master/docs/third_party.md),其中使用最广泛的就是google自己实现的GRPC。
+protobuf官方文档列举了多个基于protobuf实现的[RPC](https://github.com/protocolbuffers/protobuf/blob/master/docs/third_party.md),其中使用最广泛的就是google自己实现的`GRPC`。
 
 
 ## 谷歌grpc
@@ -36,21 +37,17 @@ grpc的stream类型。在面对需要传输大量数据的时候，可以不断�
 rpc BidiHello(stream HelloRequest) returns (stream HelloResponse);
 ```
 
-**grpc用http2的协议进行传输，不支持服务端的推送，更多的使用场景是面向微服务和web，所以并不满足在游戏中前后端的交互。**
+**综上：grpc使用http2的协议进行传输，不仅有http头的占用，而且不支持服务端的主动推送，更多的使用场景是面向微服务和web，所以并不适合用来在游戏中实现前后端的交互。**
 
 ## 其它实现
 
-其它实现基本都支持一种语言。其中java端的实现
-
-蚂蚁金服开源的SOFARPC。
-
-百度开源的
-
+其它实现基本都只支持一种语言。其中java端的实现主要有蚂蚁金服开源的`SOFARPC`和百度开源的`Jprotobuf-rpc-socket`
 
 
 
 # 参考
->1. Java Generated Code: https://developers.google.com/protocol-buffers/docs/reference/java-generated#service
->2. gRPC: https://grpc.io/
->3. http2: https://en.wikipedia.org/wiki/HTTP/2
->4. gRPC Motivation and Design Principles: https://grpc.io/blog/principles/
+>1.Java Generated Code: https://developers.google.com/protocol-buffers/docs/reference/java-generated#service
+>2.gRPC: https://grpc.io/
+>3.http2: https://en.wikipedia.org/wiki/HTTP/2
+>4.gRPC Motivation and Design Principles: https://grpc.io/blog/principles/
+>5.proto2 Defining Services: https://developers.google.com/protocol-buffers/docs/proto#services
