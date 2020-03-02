@@ -4,14 +4,23 @@
 remote_theme: "mmistakes/minimal-mistakes"
 
 
-title: 'LESS IS MORE'
+title: '也无风雨也无晴'
 logo: "/assets/logo.png"
 
 encoding: "utf-8"
 permalink: /:categories/:title/
+search: true
+
+author:
+  #name: "near"
+  avatar: "/assets/actor.jpg"
+  bio: "LESS IS MORE" # Note: Markdown is allowed
+  location: "成都"
 
 plugins:
   - jekyll-include-cache
+
+
 
 # 设定默认的布局
 defaults:
@@ -20,6 +29,6 @@ defaults:
       type: posts
     values:
       layout: single
-      author_profile: false
+      author_profile: true
       classes: wide
       read_time: true
