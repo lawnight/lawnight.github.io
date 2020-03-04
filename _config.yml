@@ -13,7 +13,7 @@ search: true
 
 author:
   #name: "near"
-  avatar: "/assets/actor.jpg"
+  avatar: "/assets/actor2.jpg"
   bio: "LESS IS MORE" # Note: Markdown is allowed
   location: "成都"
 
