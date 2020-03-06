@@ -5,11 +5,12 @@ remote_theme: "mmistakes/minimal-mistakes"
 
 
 title: '也无风雨也无晴'
-logo: "/assets/logo.png"
+logo: "/assets/logo2.png"
 
 encoding: "utf-8"
 permalink: /:categories/:title/
-search: true
+#search: true
+markdown: GFM
 
 author:
   #name: "near"
@@ -30,5 +31,4 @@ defaults:
     values:
       layout: single
       author_profile: true
-      classes: wide
-      read_time: true
+      classes: wide      
