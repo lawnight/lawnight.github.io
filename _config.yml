@@ -9,7 +9,7 @@ logo: "/assets/logo2.png"
 
 encoding: "utf-8"
 permalink: /:categories/:title/
-#search: true
+search: true
 markdown: GFM
 
 author:
