@@ -41,14 +41,28 @@ package FObjectReplicator  {
   [repLayout]
 }
 
+package UClass{
+    
+}
+
 note left of [repLayout]:根据uclass创建出来，在netdrive中缓存
 note left of [PackageMap]:Maps objects and names,来自UNetConnection
 
 
-rectangle GO #lightgreen
-
 NetConnection -down->Connection
 channel -down->Channel
+
+@enduml
+```
+
+```puml
+@startuml
+
+UClass : TArray<FRepRecord> ClassReps
+Layout:	TArray<FRepParentCmd> Parents
+Layout:TArray<FRepLayoutCmd> Cmds	
+ArrayList : Object[] elementData
+ArrayList : size()
 
 @enduml
 ```
@@ -67,9 +81,12 @@ channel -down->Channel
 
 ### replayout
 
-Relayout描述同步属性的具体类型，无状态，一个类型对应一个FRepLayout。所有的属性在Replayout中被当做`Layout Commands`。分为Parent Command和Child Command。
+replayout管理所有UClass, UStruct, or UFunction的同步properties。用来读写比较属性的状态`FRepState`。一个类型对应一个FRepLayout，所有同样类型的实例共享一个FRepLayout。所有的属性在Replayout中被当做`Layout Commands`。分为Parent Command和Child Command。
+
+属性只能从服务器同步到客户端。两边保持了不同的状态。`FSendingRepState`,`FReceivingRepState`。
 
 changelist，可以知道两帧之间，改变了的属性。
+
 
 ### netguid
 
@@ -145,7 +162,7 @@ Example: Client RPC to Server.
 每个包都有自增的序列号。
 ### 协议
 
-
+`<<`根据具体的类，被重载为序列化或者反序列化。
 ```
 uint32 FNetworkVersion::EngineNetworkProtocolVersion	= HISTORY_ENGINENETVERSION_LATEST;
 uint32 FNetworkVersion::GameNetworkProtocolVersion		= 0;
@@ -264,6 +281,63 @@ bunch有许多标志位。包括是否完整的Bunch，是否是可靠等。
 `TUniquePtr`
 
 ## 反射
+c++不支持原生的反射。UE4自己实现了一套反射系统。属性的定义在· ObjectBase.h·中有简单的注释，可以帮助理解它所代表的意思。
+
+Unreal Build Tool (UBT) and Unreal Header Tool (UHT)来生产反射所需要的代码。存储在·per-module .generated.inl·和·per-header .generated.h·
+
+可以通过类型，也可以通过对象，拿到对应的反射类。
+```C++
+UTypeName::StaticClass() 
+Instance->GetClass() 
+//遍历反射对象的属性
+for (TFieldIterator<UProperty> PropIt(GetClass()); PropIt; ++PropIt)
+{
+	UProperty* Property = *PropIt;
+	// Do something with the property
+}
+```
+
+```C++
+//////////////////////////////////////////////////////////////////////////
+// Base class for mobile units (soldiers)
+
+#include "StrategyTypes.h"
+#include "StrategyChar.generated.h"
+
+UCLASS(Abstract)
+
+class AStrategyChar : public ACharacter, public IStrategyTeamInterface
+{
+
+	GENERATED_UCLASS_BODY()
+
+	/** How many resources this pawn is worth when it dies. */
+	UPROPERTY(EditAnywhere, Category=Pawn)
+	int32 ResourcesToGather;
+
+	/** set attachment for weapon slot */
+	UFUNCTION(BlueprintCallable, Category=Attachment)
+	void SetWeaponAttachment(class UStrategyAttachment* Weapon);
+
+	UFUNCTION(BlueprintCallable, Category=Attachment)
+	bool IsWeaponAttached();
+
+	protected:
+
+	/** melee anim */
+	UPROPERTY(EditDefaultsOnly, Category=Pawn)
+	UAnimMontage* MeleeAnim;
+
+	/** Armor attachment slot */
+	UPROPERTY()
+	UStrategyAttachment* ArmorSlot;
+
+	/** team number */
+	uint8 MyTeamNum;
+
+	[more code omitted]
+};
+```
 
 The type hierarchy for the property system looks like this:
 ```
@@ -280,9 +354,14 @@ UField
 		(Many subclasses for different types)
 ```
 
-## 同步
+## 属性同步
+
+之前的惊奇游戏，修改属性后会把actor置为dirty。每帧更新的时候，会检查更新为dirty的actor所有属性。
 
 
+## 结论
+
+对网络注重性能优化，大部分优化从堡垒之夜而来。适合开发堡垒之夜类型的游戏。
 
 ## 参考
 > 2. replayout.h netdriver.h netserializtion.h(自定义序列化 replayout 注释
