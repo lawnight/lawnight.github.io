@@ -1,6 +1,7 @@
 ---
 title: git操作手册
 categories: server
+date: 3-2
 ---
 列举一些git常用，又老是忘记的操作。
 ## 命令行

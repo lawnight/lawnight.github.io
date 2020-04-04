@@ -55,45 +55,6 @@ channel -down->Channel
 @enduml
 ```
 
-```puml
-@startuml
-
-UClass : TArray<FRepRecord> ClassReps
-Layout:	TArray<FRepParentCmd> Parents
-Layout:TArray<FRepLayoutCmd> Cmds	
-ArrayList : Object[] elementData
-ArrayList : size()
-
-@enduml
-```
-
-### Net Serializtion
-
- *		Everything originates in UNetDriver::ServerReplicateActors.
- *		Actors are chosen to replicate, create actor channels, and UActorChannel::ReplicateActor is called.
- *		ReplicateActor is ultimately responsible for deciding what properties have changed, and constructing an FOutBunch to send to clients.
-
- 检测变量改变分为值类型数据和指针类型数据。
-值类型，可以直接比较`Recent[]`然后用NetSerialize
-指针类型，用NetDeltaSerialize比较状态和序列化。base state，delta state（发给客户端），full state（保存）。
-
-有两种类型的`delta序列化`：generic Repication和fast array replication
-
-### replayout
-
-replayout管理所有UClass, UStruct, or UFunction的同步properties。用来读写比较属性的状态`FRepState`。一个类型对应一个FRepLayout，所有同样类型的实例共享一个FRepLayout。所有的属性在Replayout中被当做`Layout Commands`。分为Parent Command和Child Command。
-
-属性只能从服务器同步到客户端。两边保持了不同的状态。`FSendingRepState`,`FReceivingRepState`。
-
-changelist，可以知道两帧之间，改变了的属性。
-
-
-### netguid
-
-通过netguid来在服务器和客户端来标示对象的引用。在actor的相关性变化的时候，可能会发生多次mapping和unmapping。
-
-### int
-跟protobuf的Varinet一样。用1位来代表时候有更多的字节。
 
 ### FSocket和SocketSubSystem
 
@@ -160,55 +121,7 @@ Example: Client RPC to Server.
     to call the appropriate function on the Actor.
 
 每个包都有自增的序列号。
-### 协议
 
-`<<`根据具体的类，被重载为序列化或者反序列化。
-```
-uint32 FNetworkVersion::EngineNetworkProtocolVersion	= HISTORY_ENGINENETVERSION_LATEST;
-uint32 FNetworkVersion::GameNetworkProtocolVersion		= 0;
-
-uint32 FNetworkVersion::EngineCompatibleNetworkProtocolVersion		= HISTORY_REPLAY_BACKWARDS_COMPAT;
-uint32 FNetworkVersion::GameCompatibleNetworkProtocolVersion		= 0;
-```
-
-packet是connection。bunch是channel。
-
-`DataBunch.h`定义了bunch。
-
-
-`FReceivedPacketView`:Represents a view of a received packet
-
-
-先读出头`FNetPacketNotify::ReadHeader`：
-```
-	Data.Seq = FPackedHeader::GetSeq(PackedHeader);
-	Data.AckedSeq = FPackedHeader::GetAckedSeq(PackedHeader);
-	Data.HistoryWordCount = FPackedHeader::GetHistoryWordCount(PackedHeader) + 1;
-```
-
-
-
-**协议**：
-```puml
-@startuml
-digraph structs {
-node [shape=record,width=.1,height=.1];
-
-rankdir=LR;
-node1 [shape=record,label="<a>packet header | <b>bunches | end tag(0x80)"];
-
-node3 [label = "{<n> seq | AckedSeq |<p>... }"];
-
-node2 [color=blue,label="<a> bunch header |data  "]
-
-node4 [label = "{<n> contrl |type| channelID |len|flags|<p>... }"];
-
-node1:b->node2
-node1:a->node3
-node2:a->node4
-}
-@enduml
-```
 
 ```puml
 @startuml
@@ -245,17 +158,6 @@ stop
 @enduml
 ```
 
-
-FNetBitReader ：A bit reader that serializes FNames and UObject* through
- 	a network packagemap.
-
-packet header和bunch header随着版本变化，格式不一样。在`EEngineNetworkVersionHistory`定义了协议的历史版本号。
-
-packet是用结束标示来识别完整的packet。应该是因为，UE4限制了包最大为MTU。所以基本不会有拆包的情况，收到包判断最后一个标志位大概率会直接成功。
-
-packet可能包含0个或多个bunch。packet header包含对应链接信息，会路由到对应链接，
-
-bunch有许多标志位。包括是否完整的Bunch，是否是可靠等。
 
 ### 消息收发流程
 
@@ -339,24 +241,8 @@ class AStrategyChar : public ACharacter, public IStrategyTeamInterface
 };
 ```
 
-The type hierarchy for the property system looks like this:
-```
-UField
-	UStruct
-		UClass (C++ class)
-		UScriptStruct (C++ struct)
-		UFunction (C++ function)
 
-	UEnum (C++ enumeration)
 
-	UProperty (C++ member variable or function parameter)
-
-		(Many subclasses for different types)
-```
-
-## 属性同步
-
-之前的惊奇游戏，修改属性后会把actor置为dirty。每帧更新的时候，会检查更新为dirty的actor所有属性。
 
 
 ## 结论

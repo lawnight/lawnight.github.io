@@ -2,10 +2,18 @@
 
 
 ## 调试技巧
+
 ` 可以打开控制台
 蓝图也可以断点
 
 在控制台可以设置网络延时和丢包。
+
+在vs中断点
+- 安装UnrealVS Extension
+- 选择`debuggame editor`，在vs启动
+- 在通过vs启动的UE编辑器中play游戏，可以触发断点
+
+## 移动
 
 simulate，收到位置后，通过线性或者指数的插值方式，平滑移动到目标点。`client prediction data`。
 

@@ -1,6 +1,6 @@
 ---
 title: 搭建家庭影院
-categories: server
+categories: others
 ---
 
 # 方案选择
