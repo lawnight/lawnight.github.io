@@ -8,4 +8,7 @@ date: 3-2
 ```bash
 git branch -a               #列举分支，包括远端
 git branch -vv              #当前分支以及定义的远端分支
+
+git diff > patch
+git diff --no-index  "c++.md" "c2.md" #比较本地两个文件
 ```
