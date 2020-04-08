@@ -61,43 +61,6 @@ channel -down->Channel
 FSocket是对网络底层的封装，对于上层需要的网络状态查询、发包、收包这些操作，全部都封装在了这里。屏蔽了与平台相关的底层。
 
 
-## 初始化，建立连接
-
-当服务器加载地图（UEngine::LoadMap），就会调用`UWorld::Listen`监听端口。客服端就可以连接服务器了。`SocketSubsystem->CreateSocket()`根据所在平台，创建socket。`FSocket`来包装socket，提供跨平台。
-
-在`UIpNetDriver::InitBase`中创建socket，并设置socket属性，发生接收buffer大小，开启广播，非阻塞等，最后绑定端口。对于UDP来说，绑定端口就是
-
-`UNetDriver::TickDispatch` 负责接收网络数据，根据数据包的地址来判断是否已经建立连接，还没建立连接的就会先进行握手。或者路由到对应connection`Connection->ReceivedRawPacket`
-
-UDP容易受到各种DOS攻击，特别是伪装IP地址，所以需要握手来判断IP地址的合法性。UE4用无状态的handshake，避免欺骗包消耗服务器的内存。
-
-**玩家登陆流程，包含两次握手**：
-```puml
-@startuml
-group handshaking
-    client->server: 初始化连接
-    server->client: challenge with cookie
-    client->server: response with cookie
-    Note over server: 验证cookie并创建连接
-    server->client: ack
-end
-group game level handshaking  
-    client->server: NMT_Hello
-    server->client: NMT_Challenge（可选加密）
-    client->server: NMT_Login
-    Note over server: 验证challenge
-    server->client: NMT_Welcome with mapInfo
-    Note over client: 加载地图
-    client->server:NMT_NetSpeed
-    Note over server: 调整连接的Net Speed
-end
-caption 连接过程
-@enduml
-```
-
-有时候，路由器会改变包的端口，收到还未握手的包，服务器会发送1个字节的回包，让其重新开启握手。
-
-game level handshaking，用`NetControlMessage`完成。
 
 
 
@@ -242,6 +205,15 @@ class AStrategyChar : public ACharacter, public IStrategyTeamInterface
 ```
 
 
+### Net Serializtion
+检测变量改变分为值类型数据和指针类型数据。
+- 值类型，可以直接比较`Recent[]`然后用NetSerialize
+- 指针类型，用NetDeltaSerialize比较状态和序列化。base state，delta state（发给客户端），full state（保存）。
+
+有两种类型的`delta序列化`：generic Repication和fast array replication
+
+`DataBunch.h`定义了bunch。
+`FReceivedPacketView`:Represents a view of a received packet
 
 
 
@@ -250,10 +222,3 @@ class AStrategyChar : public ACharacter, public IStrategyTeamInterface
 对网络注重性能优化，大部分优化从堡垒之夜而来。适合开发堡垒之夜类型的游戏。
 
 ## 参考
-> 2. replayout.h netdriver.h netserializtion.h(自定义序列化 replayout 注释
-> 1. https://blog.ch-wind.com/ue4-network-overview/
-https://blog.uwa4d.com/archives/USparkle_Exploring.html
-
-反射：https://zhuanlan.zhihu.com/p/60622181
-
-https://www.unrealengine.com/zh-CN/blog/unreal-property-system-reflection
