@@ -161,8 +161,14 @@ friend FArchive& operator<<(FArchive& Ar, uint32& Value)
 const TArray<uint32> data = {0,1,2,3,4,5,6,7,8,9,10,11,10,9,8,7,6,5,4,3,2,1,0};
 HandleFire(data);
 ```
-  
+
 ![1](/assets/serialization1.png )
+
+所以在RPC参数类型选择上，应该尽量选择占用空间小的。能uint8表示的就不用uint32。
+```c++
+UFUNCTION(unreliable, server, WithValidation)
+void ServerMove(float TimeStamp, FVector_NetQuantize10 InAccel, FVector_NetQuantize100 ClientLoc, uint8 CompressedMoveFlags, uint8 ClientRoll, uint32 View, UPrimitiveComponent* ClientMovementBase, FName ClientBaseBoneName, uint8 ClientMovementMode);
+```
   
 ###  自定义序列化
   
@@ -249,6 +255,7 @@ NetDeltaSerialization的主要应用就是`Fast TArray Replication`。如果你�
   
   
 1. 用UE4提供的向量序列化方法来更高效的序列化向量。
+1. RPC的参数尽量选用占用空间更小的类型。能用int8表示参数就不要用int32。
 1. 默认的属性序列化字节利用率不高，如果是大字节或者调用频繁的RPC，应该自定义序列化方法。
   
 (The end)
