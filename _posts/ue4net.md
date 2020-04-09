@@ -59,7 +59,7 @@ ServerMoveNoBase
 OnlineSubsystem是一个多网络平台对接系统，在ue4中以插件的形式存在。可以通过他对接Steam，GooglePlay，Amazon，Xbox，Tencent等，进而使用对应平台的各项自定义功能，如语音聊天，在线统计，游戏大厅与游戏匹配等。
 
 ### 性能监控
-ue4提供独立的程序 `/Engine/Binaries/DotNET/NetworkProfiler.exe`对网络性能进行了一定的监控。
+
 
 ### 地图切换
 
