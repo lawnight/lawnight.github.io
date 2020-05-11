@@ -6,7 +6,7 @@ categories: others
 深度学习有时候又叫深度神经网络，是机器学习下的分支，是一个具体的算法。自从2012年在图像识别算法中打败其它所有的算法后，成为机器学习中的一枝独秀。并且在2016年alphaGo打败围棋世界冠军后，变得家喻户晓。一时间人人都在畅想人工智能会给我们的生活带来怎样的变化，除了围棋，还能在那些方面超过我们 。
   
 本文希望对能深度学习的原理做简单的解释，帮助我们理解深度学习到底是什么，究竟能改变些什么。
-![1](../assets/deep1.png )
+![1](/assets/deep1.png )
   
   
 ##  现状
@@ -25,10 +25,10 @@ categories: others
 由简入难，先看一个二分类的问题。如图，图中的图形有三角形和圆形两类，并且图形的位置由Feature0和Feature1唯一确定。是否存在一个方程，代入<img src="https://latex.codecogs.com/gif.latex?f_0"/>（Feature0）和<img src="https://latex.codecogs.com/gif.latex?f_1"/>（Feature1）的值我们就能得到次位置是三角形的概率。概率如果大于0.5就为三角形，小于0.5就为圆形。
   
 如何寻找这样的方程呢？考虑如果存在这样一个方程：<img src="https://latex.codecogs.com/gif.latex?y=sigmod(w_0f_0+w_1f_1+b)"/>。代入<img src="https://latex.codecogs.com/gif.latex?f_0"/>和<img src="https://latex.codecogs.com/gif.latex?f_1"/>就能得到它是三角形的概率。
-![2](../assets/deep2.png )
+![2](/assets/deep2.png )
   
 这个方程有<img src="https://latex.codecogs.com/gif.latex?w_0"/>、<img src="https://latex.codecogs.com/gif.latex?w_1"/>和<img src="https://latex.codecogs.com/gif.latex?b"/>三个参数的值需要确定，暂且都称其为权重。其大概流程如图所示。通过不断的更新权重，使预测值和真实值之间的差距最小。从而得到合适的权重值。
-![3](../assets/deep3.png )
+![3](/assets/deep3.png )
   
 选择合适的损失函数和优化器是算法的核心。常见的就是`交叉熵`和`梯度下降`。
   
@@ -47,7 +47,7 @@ categories: others
   
 形如直线或者单曲线的分类，在面对更复杂问题的时候表达力是不足。将逻辑回归串联成网络，就形成了强大的神经网络。而所谓的深度神经网络的“深度”，就是因为其中较多的hidden layer。
   
-![5](../assets/deep5.png )
+![5](/assets/deep5.png )
   
 在形成网络后，会增加十分多的计算量。于是多了诸如前向传播，后向传播的算法，把很多计算并行化。将数据并成多维数组，也就是张量（Tensor），然后批量运算就可以大大减少运算时间。所有GPU因为强大的并行浮点数运算，能减少神经网络的运算时间。
   
@@ -123,7 +123,7 @@ Adam（Adaptive Moment Estimation）是少有的对所有模型都有效的优�
   
   
 在面对实际问题的时候，一般为后获取数据，将数据集划分为训练集和测试集，然后不断建模，调参，训练。再不断的调整中，摸索出最佳算法和参数。
-![4](../assets/deep4.png )
+![4](/assets/deep4.png )
   
 ##  结论
   
