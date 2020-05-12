@@ -6,9 +6,11 @@ date: 3-2
 列举一些git常用，又老是忘记的操作。
 ## 命令行
 ```bash
-git branch -a               #列举分支，包括远端
-git branch -vv              #当前分支以及定义的远端分支
+git branch -a                                       #列举分支，包括远端
+git branch -vv                                      #当前分支以及定义的远端分支
 
 git diff > patch
-git diff --no-index  "c++.md" "c2.md" #比较本地两个文件
+git diff --no-index  "c++.md" "c2.md"               #比较本地两个文件
+
+git merge -X theirs develop -m 'merge from xxx'     #用develop的版本解决冲突的版本
 ```
