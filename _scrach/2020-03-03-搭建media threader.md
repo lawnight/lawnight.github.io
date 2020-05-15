@@ -64,7 +64,7 @@ youtube-dl url
 
 ## 外网访问
 
-成都电信，打10000号就可以让客户开通公网ip了（2020年2月）。然后获得光猫的超级账号，开启upnp。DDNS等换了路由器再说。
+成都电信，打10000号就可以让客户开通公网ip了（2020年2月）。然后获得光猫的超级账号，开启upnp。DDNS用http://freedns.afraid.org的，python定时请求更新ip地址就行了。
 
 ## 参考
 >1. `Using_FFmpeg_with_NVIDIA_GPU_Hardware_Acceleration`: https://developer.download.nvidia.com/designworks/ffmpeg/secure/Using_FFmpeg_with_NVIDIA_GPU_Hardware_Acceleration_v01.4.pdf
