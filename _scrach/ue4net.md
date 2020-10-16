@@ -40,6 +40,7 @@ ServerMoveNoBase
 客户端会每帧更新组件。服务器不会。服务器统一在`UNetDriver::ServerReplicateActors`的更新中发送。
 
 ##### Calculating
+
 两种模式。用客户端的时间戳，
 
 默认配置，每秒60帧同步移动数据。`MAXPOSITIONERRORSQUARED`来配置服务器能容忍的最大位置误差
