@@ -25,6 +25,6 @@
 
 ### 关于数学公式
 
-用 kramdown 渲染引擎，并且引用一个javascrip脚本。可能会有不稳定导致的失效
+用 kramdown 渲染引擎，并且引用一个javascrip脚本。可能会有应用的脚本不稳定导致的失效。
 
 参考：https://github.com/mmistakes/minimal-mistakes/issues/735
