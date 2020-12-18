@@ -25,6 +25,8 @@
 
 ### 关于数学公式
 
-用 kramdown 渲染引擎，并且引用一个javascrip脚本。可能会有应用的脚本不稳定导致的失效。
+用 kramdown 渲染引擎，并且引用一个javascrip脚本，mathjax。可能会有应用的脚本不稳定导致的失效。
+
+LaTeX语法参考：https://en.wikibooks.org/wiki/LaTeX/Mathematics
 
 参考：https://github.com/mmistakes/minimal-mistakes/issues/735
