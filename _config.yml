@@ -2,6 +2,8 @@
 #theme: minimal-mistakes-jekyll
 # 第三方开源主题
 remote_theme: "mmistakes/minimal-mistakes"
+# Google Analytics
+google_analytics: G-5K7TNP8542
 
 
 title: '竹杖芒鞋轻胜马'
